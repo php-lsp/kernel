@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lsp\Kernel;
 
+use Lsp\Contracts\Server\ManagerInterface;
 use Lsp\Kernel\DependencyInjection\CodecCompilerPass;
 use Lsp\Kernel\DependencyInjection\Dispatcher\DispatcherLoaderCompilerPass;
 use Lsp\Kernel\DependencyInjection\DispatcherCompilerPass;
@@ -13,7 +14,6 @@ use Lsp\Kernel\DependencyInjection\Router\RouteLoaderCompilerPass;
 use Lsp\Kernel\DependencyInjection\RouterCompilerPass;
 use Lsp\Kernel\DependencyInjection\Server\ServerPublisherCompilerPass;
 use Lsp\Kernel\DependencyInjection\ServerCompilerPass;
-use Lsp\Server\ServerPoolInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -42,9 +42,9 @@ class LanguageServerKernel extends Kernel implements ServerKernelInterface
 
     public function listen(string $dsn): void
     {
-        $pool = $this->container->get(ServerPoolInterface::class);
+        $pool = $this->container->get(ManagerInterface::class);
 
-        if (!$pool instanceof ServerPoolInterface) {
+        if (!$pool instanceof ManagerInterface) {
             throw new \LogicException('Could not fetch server pool instance from container');
         }
 
